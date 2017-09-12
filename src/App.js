@@ -12,8 +12,8 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <Grid fluid className="noPadding">
-          <Row>
-            <Col xs={12} md={12}>
+          <Row className="noMargin">
+            <Col xs={12} md={12} className="noPadding">
               <AppBar
                 style={{
                   backgroundColor: "#03A9F4"
@@ -23,11 +23,11 @@ class App extends Component {
               />
             </Col>
           </Row>
-          <Row className="target">
-            <Col xs={4} md={4}>
+          <Row className="noMargin">
+            <Col xs={4} md={4} className="noPadding">
               <ToDoList />
             </Col>
-            <Col xs={8} md={8} />
+            <Col xs={8} md={8} className="noPadding" />
           </Row>
         </Grid>
       </MuiThemeProvider>
