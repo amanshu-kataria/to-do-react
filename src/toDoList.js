@@ -5,6 +5,7 @@ import Checkbox from "material-ui/Checkbox";
 import AppBar from "material-ui/AppBar";
 import "./toDoList.css";
 import ContentAdd from "material-ui/svg-icons/content/add";
+import ContentClear from "material-ui/svg-icons/content/clear";
 import IconButton from "material-ui/IconButton";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
@@ -14,7 +15,11 @@ import FlatButton from "material-ui/FlatButton";
 //Returns add button to the task bar
 function AddButton(props) {
   return (
-    <IconButton onClick={props.onClick} iconStyle={{ color: props.color }}>
+    <IconButton
+      onClick={props.onClick}
+      tooltip="New Task"
+      iconStyle={{ color: props.color }}
+    >
       <ContentAdd />
     </IconButton>
   );
@@ -24,49 +29,80 @@ class ToDoList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      addTaskVisible: false
+      addTaskVisible: false,
+      taskName: "",
+      taskList: []
     };
-    this.addInput = this.addInput.bind(this);
+
+    this.addTaskInput = this.addTaskInput.bind(this);
+    this.closeNewTask = this.closeNewTask.bind(this);
+    this.taskNameChange = this.taskNameChange.bind(this);
+    this.addTask = this.addTask.bind(this);
   }
 
-  addInput(e) {
-    this.setState({ addTaskVisible: true });
+  addTaskInput() {
+    if (this.state.taskList.length > 0) {
+      var list = this.state.taskList;
+      list.map(e => console.log(e));
+    }
+    if (!this.state.addTaskVisible) {
+      this.setState({ addTaskVisible: true });
+    } else return;
+  }
+
+  taskNameChange(event) {
+    this.setState({ taskName: event.target.value });
+  }
+
+  closeNewTask() {
+    this.setState({
+      addTaskVisible: false,
+      taskName: ""
+    });
+  }
+
+  addTask() {
+    var list = this.state.taskList;
+    list.push(this.state.taskName);
+    this.setState({ taskList: list, taskName: "", addTaskVisible: false });
   }
 
   render() {
     const styles = {
       checkbox: {
-        paddingLeft: 16
+        paddingLeft: 16,
+        paddingTop: 5,
+        paddingBottom: 5
       },
       textField: {
         paddingLeft: 16,
         marginRight: 20,
-        width: "70%"
+        width: "64%",
+        floatingLabelFocusStyle: {
+          color: "#67daff"
+        },
+        underlineStyle: {
+          borderColor: "#67daff"
+        }
       },
       defaultColor: {
         backgroundColor: "#67daff"
+      },
+      divider: {
+        marginLeft: "3%",
+        marginRight: "5%"
       }
     };
 
-    function Checkboxes() {
-      return (
-        <Checkbox
-          label="Label on the left"
-          labelPosition="left"
-          style={styles.checkbox}
-        />
-      );
-    }
-
-    function NewTask() {
+    function Checkboxes(props) {
       return (
         <div>
-          <TextField
-            hintText="Task"
-            style={styles.textField}
-            floatingLabelText="New Task"
+          <Checkbox
+            label={props.name}
+            labelPosition="left"
+            style={styles.checkbox}
           />
-          <FlatButton label="Add" primary={true} />
+          <Divider style={styles.divider} />
         </div>
       );
     }
@@ -78,15 +114,38 @@ class ToDoList extends Component {
           style={styles.defaultColor}
           title="Task"
           titleStyle={{ fontSize: 20 }}
-          iconElementRight={<AddButton onClick={this.addInput} color="white" />}
+          iconElementRight={
+            <AddButton onClick={this.addTaskInput} color="white" />
+          }
           showMenuIconButton={false}
         />
         <div>
-          {this.state.addTaskVisible ? <NewTask /> : null}
-          <List>
-            <Checkboxes />
-          </List>
+          {this.state.addTaskVisible ? (
+            <div>
+              <TextField
+                autoFocus
+                hintText="Task"
+                style={styles.textField}
+                floatingLabelText="New Task"
+                value={this.state.taskName}
+                onChange={this.taskNameChange}
+                floatingLabelFocusStyle={
+                  styles.textField.floatingLabelFocusStyle
+                }
+                underlineFocusStyle={styles.textField.underlineStyle}
+              />
+              <FlatButton label="Add" primary={true} onClick={this.addTask} />
+              <IconButton tooltip="Cancel" onClick={this.closeNewTask}>
+                <ContentClear />
+              </IconButton>
+            </div>
+          ) : null}
         </div>
+        <List>
+          {this.state.taskList.map((task, index) => (
+            <Checkboxes key={index} name={task} />
+          ))}
+        </List>
       </div>
     );
   }
