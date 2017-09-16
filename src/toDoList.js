@@ -119,7 +119,7 @@ class ToDoList extends Component {
           showMenuIconButton={false}
         />
 
-        <div>
+        <div className="taskList">
           {this.state.addTaskVisible ? (
             <div>
               <TextField
@@ -140,12 +140,12 @@ class ToDoList extends Component {
               </IconButton>
             </div>
           ) : null}
+          <List>
+            {this.state.taskList.map((task, index) => (
+              <Checkboxes key={index} name={task} />
+            ))}
+          </List>
         </div>
-        <List className="taskList">
-          {this.state.taskList.map((task, index) => (
-            <Checkboxes key={index} name={task} />
-          ))}
-        </List>
       </div>
     );
   }
