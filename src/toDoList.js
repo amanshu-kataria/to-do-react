@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import "react-bootstrap/dist/react-bootstrap.min.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Checkbox from "material-ui/Checkbox";
 import AppBar from "material-ui/AppBar";
 import "./toDoList.css";
 import ContentAdd from "material-ui/svg-icons/content/add";
 import ContentClear from "material-ui/svg-icons/content/clear";
 import IconButton from "material-ui/IconButton";
-import List from "material-ui/List";
+import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import TextField from "material-ui/TextField";
 import FlatButton from "material-ui/FlatButton";
+import IconMenu from "material-ui/IconMenu";
+import MenuItem from "material-ui/MenuItem";
+import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 
 //Returns add button to the task bar
 function AddButton(props) {
@@ -68,11 +70,6 @@ class ToDoList extends Component {
 
   render() {
     const styles = {
-      checkbox: {
-        paddingLeft: 16,
-        paddingTop: 5,
-        paddingBottom: 5
-      },
       textField: {
         paddingLeft: 16,
         marginRight: 20,
@@ -93,14 +90,22 @@ class ToDoList extends Component {
       }
     };
 
-    function Checkboxes(props) {
+    const iconButtonElement = (
+      <IconButton touch={true}>
+        <MoreVertIcon />
+      </IconButton>
+    );
+
+    const rightIconMenu = (
+      <IconMenu iconButtonElement={iconButtonElement}>
+        <MenuItem>Done</MenuItem>
+      </IconMenu>
+    );
+
+    function TaskItem(props) {
       return (
         <div>
-          <Checkbox
-            label={props.name}
-            labelPosition="left"
-            style={styles.checkbox}
-          />
+          <ListItem primaryText={props.name} rightIconButton={rightIconMenu} />
           <Divider style={styles.divider} />
         </div>
       );
@@ -142,7 +147,7 @@ class ToDoList extends Component {
           ) : null}
           <List>
             {this.state.taskList.map((task, index) => (
-              <Checkboxes key={index} name={task} />
+              <TaskItem key={index} name={task} />
             ))}
           </List>
         </div>
