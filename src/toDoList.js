@@ -7,7 +7,7 @@ import "./toDoList.css";
 import ContentAdd from "material-ui/svg-icons/content/add";
 import ContentClear from "material-ui/svg-icons/content/clear";
 import IconButton from "material-ui/IconButton";
-import { List, ListItem } from "material-ui/List";
+import List from "material-ui/List";
 import Divider from "material-ui/Divider";
 import TextField from "material-ui/TextField";
 import FlatButton from "material-ui/FlatButton";
@@ -41,10 +41,6 @@ class ToDoList extends Component {
   }
 
   addTaskInput() {
-    if (this.state.taskList.length > 0) {
-      var list = this.state.taskList;
-      list.map(e => console.log(e));
-    }
     if (!this.state.addTaskVisible) {
       this.setState({ addTaskVisible: true });
     } else return;
@@ -62,9 +58,12 @@ class ToDoList extends Component {
   }
 
   addTask() {
+    if (this.state.taskName === "") return;
+
     var list = this.state.taskList;
     list.push(this.state.taskName);
     this.setState({ taskList: list, taskName: "", addTaskVisible: false });
+    this.props.onAddTask();
   }
 
   render() {
@@ -108,7 +107,7 @@ class ToDoList extends Component {
     }
 
     return (
-      <div className="taskList">
+      <div>
         <AppBar
           className="app-bar"
           style={styles.defaultColor}
@@ -119,6 +118,7 @@ class ToDoList extends Component {
           }
           showMenuIconButton={false}
         />
+
         <div>
           {this.state.addTaskVisible ? (
             <div>
@@ -141,7 +141,7 @@ class ToDoList extends Component {
             </div>
           ) : null}
         </div>
-        <List>
+        <List className="taskList">
           {this.state.taskList.map((task, index) => (
             <Checkboxes key={index} name={task} />
           ))}

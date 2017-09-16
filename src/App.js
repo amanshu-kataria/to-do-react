@@ -6,8 +6,26 @@ import { Grid, Row, Col } from "react-bootstrap";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import ToDoList from "./toDoList";
+import Snackbar from "material-ui/Snackbar";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      snackbarOpen: false
+    };
+    this.closeSnackbar = this.closeSnackbar.bind(this);
+    this.openSnackbar = this.openSnackbar.bind(this);
+  }
+
+  closeSnackbar() {
+    this.setState({ snackbarOpen: false });
+  }
+
+  openSnackbar() {
+    this.setState({ snackbarOpen: true });
+  }
+
   render() {
     return (
       <MuiThemeProvider>
@@ -25,10 +43,16 @@ class App extends Component {
           </Row>
           <Row className="noMargin">
             <Col xs={4} md={4} className="noPadding">
-              <ToDoList />
+              <ToDoList onAddTask={this.openSnackbar} />
             </Col>
             <Col xs={8} md={8} className="noPadding" />
           </Row>
+          <Snackbar
+            open={this.state.snackbarOpen}
+            message="Task Added Successfully."
+            autoHideDuration={3000}
+            onRequestClose={this.closeSnackbar}
+          />
         </Grid>
       </MuiThemeProvider>
     );
