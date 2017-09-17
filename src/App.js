@@ -7,6 +7,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import ToDoList from "./toDoList";
 import Snackbar from "material-ui/Snackbar";
+import DetailsPanel from "./detailsPanel.js";
 
 class App extends Component {
   constructor(props) {
@@ -45,7 +46,9 @@ class App extends Component {
             <Col xs={4} md={4} className="noPadding">
               <ToDoList onAddTask={this.openSnackbar} />
             </Col>
-            <Col xs={8} md={8} className="noPadding" />
+            <Col xs={8} md={8} className="noPadding">
+              <DetailsPanel />
+            </Col>
           </Row>
           <Snackbar
             open={this.state.snackbarOpen}
