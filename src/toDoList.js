@@ -36,22 +36,31 @@ class ToDoList extends Component {
       taskList: []
     };
 
+    //creates a new key if it's not present in local storage
+    if (!localStorage.taskList) {
+      localStorage.setItem("taskList", "[]");
+    }
+
     this.addTaskInput = this.addTaskInput.bind(this);
     this.closeNewTask = this.closeNewTask.bind(this);
     this.taskNameChange = this.taskNameChange.bind(this);
     this.addTask = this.addTask.bind(this);
   }
 
+  //displays the hidden textfield for creating a new task
   addTaskInput() {
     if (!this.state.addTaskVisible) {
       this.setState({ addTaskVisible: true });
     } else return;
   }
 
+  //event handler for new task textfield.
+  //it keeps the state 'taskName' updated
   taskNameChange(event) {
     this.setState({ taskName: event.target.value });
   }
 
+  //hides the textfield which is used to add a new task.
   closeNewTask() {
     this.setState({
       addTaskVisible: false,
@@ -59,12 +68,15 @@ class ToDoList extends Component {
     });
   }
 
+  //adds a task
   addTask() {
     if (this.state.taskName === "") return;
 
-    var list = this.state.taskList;
+    //stores new task in localstorage
+    var list = JSON.parse(localStorage.getItem("taskList"));
     list.push(this.state.taskName);
-    this.setState({ taskList: list, taskName: "", addTaskVisible: false });
+    localStorage.setItem("taskList", JSON.stringify(list));
+    this.setState({ addTaskVisible: false, taskName: "" });
     this.props.onAddTask();
   }
 
@@ -89,6 +101,9 @@ class ToDoList extends Component {
         marginRight: "5%"
       }
     };
+
+    //gets saved task from local storage for rendering.
+    this.savedTask = JSON.parse(localStorage.getItem("taskList"));
 
     const iconButtonElement = (
       <IconButton touch={true}>
@@ -146,7 +161,7 @@ class ToDoList extends Component {
             </div>
           ) : null}
           <List>
-            {this.state.taskList.map((task, index) => (
+            {this.savedTask.map((task, index) => (
               <TaskItem key={index} name={task} />
             ))}
           </List>
