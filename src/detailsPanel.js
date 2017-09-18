@@ -13,6 +13,23 @@ import TextField from "material-ui/TextField";
 import Subheader from "material-ui/Subheader";
 
 class DetailsPanel extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      notification: ""
+    };
+  }
+
+  componentWillMount() {
+    if (this.props.task === -1)
+      this.setState({ name: "Task Name", notification: false });
+    else {
+      var task = JSON.parse(localStorage.getItem("taskList"))[this.props.task];
+      this.setState({ name: task.name, notification: task.notification });
+    }
+  }
+
   render() {
     const styles = {
       cardStyle: {
@@ -53,7 +70,7 @@ class DetailsPanel extends Component {
             >
               <ModeEdit />
             </IconButton>
-            <CardHeader title="Task Title" style={styles.title} />
+            <CardHeader title={this.state.name} style={styles.title} />
             <Divider style={styles.divider} />
             <CardText>
               <DatePicker
@@ -67,6 +84,7 @@ class DetailsPanel extends Component {
               <Toggle
                 label="Notification"
                 style={styles.toggle}
+                toggled={this.state.notification}
                 labelStyle={{ fontWeight: 600 }}
               />
 

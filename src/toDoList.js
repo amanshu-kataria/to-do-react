@@ -74,10 +74,20 @@ class ToDoList extends Component {
 
     //stores new task in localstorage
     var list = JSON.parse(localStorage.getItem("taskList"));
-    list.push(this.state.taskName);
+    this.newTask = {
+      name: this.state.taskName,
+      important: false,
+      notification: false
+    };
+
+    list.push(this.newTask);
     localStorage.setItem("taskList", JSON.stringify(list));
     this.setState({ addTaskVisible: false, taskName: "" });
     this.props.onAddTask();
+  }
+
+  changeSelectedTask(index) {
+    this.props.onTaskSelected(index);
   }
 
   render() {
@@ -120,7 +130,11 @@ class ToDoList extends Component {
     function TaskItem(props) {
       return (
         <div>
-          <ListItem primaryText={props.name} rightIconButton={rightIconMenu} />
+          <ListItem
+            primaryText={props.name}
+            rightIconButton={rightIconMenu}
+            onClick={props.onChangeTask}
+          />
           <Divider style={styles.divider} />
         </div>
       );
@@ -162,7 +176,11 @@ class ToDoList extends Component {
           ) : null}
           <List>
             {this.savedTask.map((task, index) => (
-              <TaskItem key={index} name={task} />
+              <TaskItem
+                key={index}
+                name={task.name}
+                onChangeTask={() => this.changeSelectedTask(index)}
+              />
             ))}
           </List>
         </div>

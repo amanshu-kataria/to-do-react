@@ -13,10 +13,25 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      snackbarOpen: false
+      snackbarOpen: false,
+      currentOpenTask: -1
     };
     this.closeSnackbar = this.closeSnackbar.bind(this);
     this.openSnackbar = this.openSnackbar.bind(this);
+    this.changeCurrentTask = this.changeCurrentTask.bind(this);
+  }
+
+  componentWillMount() {
+    if (localStorage.taskList) {
+      var list = JSON.parse(localStorage.getItem("taskList"));
+      if (list.length >= 1) {
+        this.setState({ currentOpenTask: 0 });
+      }
+    }
+  }
+
+  changeCurrentTask(index) {
+    this.setState({ currentOpenTask: index });
   }
 
   closeSnackbar() {
@@ -44,10 +59,13 @@ class App extends Component {
           </Row>
           <Row className="noMargin">
             <Col xs={4} md={4} className="noPadding">
-              <ToDoList onAddTask={this.openSnackbar} />
+              <ToDoList
+                onAddTask={this.openSnackbar}
+                onTaskSelected={this.changeCurrentTask}
+              />
             </Col>
             <Col xs={8} md={8} className="noPadding">
-              <DetailsPanel />
+              <DetailsPanel task={this.state.currentOpenTask} />
             </Col>
           </Row>
           <Snackbar
