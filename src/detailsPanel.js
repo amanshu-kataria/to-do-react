@@ -43,7 +43,7 @@ class DetailsPanel extends Component {
           titleStyle={{ fontSize: 20 }}
           showMenuIconButton={false}
         />
-        <div class="wrapper">
+        <div className="wrapper">
           <Card style={styles.cardStyle}>
             <IconButton
               className="editIcon"
@@ -73,9 +73,9 @@ class DetailsPanel extends Component {
               <Subheader>Notes</Subheader>
               <TextField
                 hintText="ADD NOTES"
-                multiLine
-                rows="6"
-                rowsMax="6"
+                multiLine={true}
+                rows={6}
+                rowsMax={6}
                 style={{ width: "90%" }}
               />
             </CardText>
