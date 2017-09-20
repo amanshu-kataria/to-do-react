@@ -41,6 +41,7 @@ class DetailsPanel extends Component {
   }
 
   changeNotificationSetting(e) {
+    if (this.props.task === -1) return;
     this.setState({ notification: e.target.checked });
     var task = JSON.parse(localStorage.getItem("taskList"));
     task[this.props.task].notification = e.target.checked;
