@@ -19,6 +19,7 @@ class DetailsPanel extends Component {
       name: "",
       notification: ""
     };
+    this.changeNotificationSetting = this.changeNotificationSetting.bind(this);
   }
 
   componentWillMount() {
@@ -28,6 +29,22 @@ class DetailsPanel extends Component {
       var task = JSON.parse(localStorage.getItem("taskList"))[this.props.task];
       this.setState({ name: task.name, notification: task.notification });
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.task === -1)
+      this.setState({ name: "Task Name", notification: false });
+    else {
+      var task = JSON.parse(localStorage.getItem("taskList"))[nextProps.task];
+      this.setState({ name: task.name, notification: task.notification });
+    }
+  }
+
+  changeNotificationSetting(e) {
+    this.setState({ notification: e.target.checked });
+    var task = JSON.parse(localStorage.getItem("taskList"));
+    task[this.props.task].notification = e.target.checked;
+    localStorage.setItem("taskList", JSON.stringify(task));
   }
 
   render() {
@@ -85,6 +102,7 @@ class DetailsPanel extends Component {
                 label="Notification"
                 style={styles.toggle}
                 toggled={this.state.notification}
+                onToggle={this.changeNotificationSetting}
                 labelStyle={{ fontWeight: 600 }}
               />
 

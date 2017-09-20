@@ -45,6 +45,7 @@ class ToDoList extends Component {
     this.closeNewTask = this.closeNewTask.bind(this);
     this.taskNameChange = this.taskNameChange.bind(this);
     this.addTask = this.addTask.bind(this);
+    this.removeTask = this.removeTask.bind(this);
   }
 
   //displays the hidden textfield for creating a new task
@@ -84,10 +85,20 @@ class ToDoList extends Component {
     localStorage.setItem("taskList", JSON.stringify(list));
     this.setState({ addTaskVisible: false, taskName: "" });
     this.props.onAddTask();
+    if (list.length === 1) this.props.onTaskSelected(0);
   }
 
   changeSelectedTask(index) {
     this.props.onTaskSelected(index);
+  }
+
+  removeTask(index) {
+    var list = JSON.parse(localStorage.getItem("taskList"));
+    list.splice(index, 1);
+    localStorage.setItem("taskList", JSON.stringify(list));
+    if (list.length >= 1) this.props.onTaskSelected(0);
+    else this.props.onTaskSelected(-1);
+    this.forceUpdate();
   }
 
   render() {
@@ -121,18 +132,16 @@ class ToDoList extends Component {
       </IconButton>
     );
 
-    const rightIconMenu = (
-      <IconMenu iconButtonElement={iconButtonElement}>
-        <MenuItem>Done</MenuItem>
-      </IconMenu>
-    );
-
     function TaskItem(props) {
       return (
         <div>
           <ListItem
             primaryText={props.name}
-            rightIconButton={rightIconMenu}
+            rightIconButton={
+              <IconMenu iconButtonElement={iconButtonElement}>
+                <MenuItem onClick={props.onDone}>Done</MenuItem>
+              </IconMenu>
+            }
             onClick={props.onChangeTask}
           />
           <Divider style={styles.divider} />
@@ -179,6 +188,7 @@ class ToDoList extends Component {
               <TaskItem
                 key={index}
                 name={task.name}
+                onDone={() => this.removeTask(index)}
                 onChangeTask={() => this.changeSelectedTask(index)}
               />
             ))}
