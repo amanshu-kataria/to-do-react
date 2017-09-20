@@ -13,6 +13,7 @@ import FlatButton from "material-ui/FlatButton";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
+import Snackbar from "material-ui/Snackbar";
 
 //Returns add button to the task bar
 function AddButton(props) {
@@ -33,7 +34,8 @@ class ToDoList extends Component {
     this.state = {
       addTaskVisible: false,
       taskName: "",
-      taskList: []
+      taskList: [],
+      snackbarOpen: false
     };
 
     //creates a new key if it's not present in local storage
@@ -46,6 +48,7 @@ class ToDoList extends Component {
     this.taskNameChange = this.taskNameChange.bind(this);
     this.addTask = this.addTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
+    this.closeSnackbar = this.closeSnackbar.bind(this);
   }
 
   //displays the hidden textfield for creating a new task
@@ -59,6 +62,10 @@ class ToDoList extends Component {
   //it keeps the state 'taskName' updated
   taskNameChange(event) {
     this.setState({ taskName: event.target.value });
+  }
+
+  closeSnackbar() {
+    this.setState({ snackbarOpen: false });
   }
 
   //hides the textfield which is used to add a new task.
@@ -98,6 +105,7 @@ class ToDoList extends Component {
     localStorage.setItem("taskList", JSON.stringify(list));
     if (list.length >= 1) this.props.onTaskSelected(0);
     else this.props.onTaskSelected(-1);
+    this.setState({ snackbarOpen: true });
     this.forceUpdate();
   }
 
@@ -194,6 +202,12 @@ class ToDoList extends Component {
             ))}
           </List>
         </div>
+        <Snackbar
+          open={this.state.snackbarOpen}
+          message="Task Deleted Successfully."
+          autoHideDuration={3000}
+          onRequestClose={this.closeSnackbar}
+        />
       </div>
     );
   }
