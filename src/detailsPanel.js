@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import "react-bootstrap/dist/react-bootstrap.min.js";
-import "bootstrap/dist/css/bootstrap.min.css";
 import AppBar from "material-ui/AppBar";
 import "./detailsPanel.css";
 import { Card, CardHeader, CardText } from "material-ui/Card";
-import IconButton from "material-ui/IconButton";
-import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import DatePicker from "material-ui/DatePicker";
 import Toggle from "material-ui/Toggle";
 import Divider from "material-ui/Divider";
@@ -17,7 +13,10 @@ class DetailsPanel extends Component {
     super(props);
     this.state = {
       name: "",
-      notification: ""
+      notification: "",
+      notes: "",
+      startDate: "",
+      endDate: ""
     };
     this.changeNotificationSetting = this.changeNotificationSetting.bind(this);
   }
@@ -81,14 +80,6 @@ class DetailsPanel extends Component {
         />
         <div className="wrapper">
           <Card style={styles.cardStyle}>
-            <IconButton
-              className="editIcon"
-              tooltip="Edit"
-              tooltipPosition="bottom-left"
-              touch={true}
-            >
-              <ModeEdit />
-            </IconButton>
             <CardHeader title={this.state.name} style={styles.title} />
             <Divider style={styles.divider} />
             <CardText>
