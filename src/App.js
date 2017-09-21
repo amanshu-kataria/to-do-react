@@ -16,6 +16,12 @@ class App extends Component {
       snackbarOpen: false,
       currentOpenTask: -1
     };
+
+    //creates a new key if it's not present in local storage
+    if (!localStorage.taskList) {
+      localStorage.setItem("taskList", "[]");
+    }
+
     this.closeSnackbar = this.closeSnackbar.bind(this);
     this.openSnackbar = this.openSnackbar.bind(this);
     this.changeCurrentTask = this.changeCurrentTask.bind(this);
