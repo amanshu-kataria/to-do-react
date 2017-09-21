@@ -14,7 +14,9 @@ class App extends Component {
     super(props);
     this.state = {
       snackbarOpen: false,
-      currentOpenTask: -1
+      currentOpenTask: -1,
+      editMode: false,
+      editIndex: -1
     };
 
     //creates a new key if it's not present in local storage
@@ -25,6 +27,8 @@ class App extends Component {
     this.closeSnackbar = this.closeSnackbar.bind(this);
     this.openSnackbar = this.openSnackbar.bind(this);
     this.changeCurrentTask = this.changeCurrentTask.bind(this);
+    this.turnOnEditMode = this.turnOnEditMode.bind(this);
+    this.turnOffEditMode = this.turnOffEditMode.bind(this);
   }
 
   componentWillMount() {
@@ -34,6 +38,14 @@ class App extends Component {
         this.setState({ currentOpenTask: 0 });
       }
     }
+  }
+
+  turnOnEditMode(index) {
+    this.setState({ editMode: true, editIndex: index });
+  }
+
+  turnOffEditMode() {
+    this.setState({ editMode: false, currentOpenTask: this.state.editIndex });
   }
 
   changeCurrentTask(index) {
@@ -68,10 +80,16 @@ class App extends Component {
               <ToDoList
                 onAddTask={this.openSnackbar}
                 onTaskSelected={this.changeCurrentTask}
+                onEdit={this.turnOnEditMode}
               />
             </Col>
             <Col xs={8} md={8} className="noPadding">
-              <DetailsPanel task={this.state.currentOpenTask} />
+              <DetailsPanel
+                task={this.state.currentOpenTask}
+                editMode={this.state.editMode}
+                editIndex={this.state.editIndex}
+                onEditModeClose={this.turnOffEditMode}
+              />
             </Col>
           </Row>
           <Snackbar

@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "react-bootstrap/dist/react-bootstrap.min.js";
-import "bootstrap/dist/css/bootstrap.min.css";
 import AppBar from "material-ui/AppBar";
 import "./toDoList.css";
 import ContentAdd from "material-ui/svg-icons/content/add";
@@ -85,7 +83,9 @@ class ToDoList extends Component {
     this.newTask = {
       name: this.state.taskName,
       important: false,
-      notification: false
+      notification: false,
+      startDate: null,
+      endDate: null
     };
 
     list.push(this.newTask);
@@ -106,6 +106,10 @@ class ToDoList extends Component {
     if (list.length >= 1) this.props.onTaskSelected(0);
     else this.props.onTaskSelected(-1);
     this.setState({ snackbarOpen: true, taskList: list });
+  }
+
+  turnOnEditMode(index) {
+    this.props.onEdit(index);
   }
 
   render() {
@@ -144,6 +148,7 @@ class ToDoList extends Component {
             rightIconButton={
               <IconMenu iconButtonElement={iconButtonElement}>
                 <MenuItem onClick={props.onDone}>Done</MenuItem>
+                <MenuItem onClick={props.onEdit}>Edit</MenuItem>
               </IconMenu>
             }
             onClick={props.onChangeTask}
@@ -194,6 +199,7 @@ class ToDoList extends Component {
                 name={task.name}
                 onDone={() => this.removeTask(index)}
                 onChangeTask={() => this.changeSelectedTask(index)}
+                onEdit={() => this.props.onEdit(index)}
               />
             ))}
           </List>

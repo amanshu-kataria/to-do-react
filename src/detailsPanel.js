@@ -7,6 +7,7 @@ import Toggle from "material-ui/Toggle";
 import Divider from "material-ui/Divider";
 import TextField from "material-ui/TextField";
 import Subheader from "material-ui/Subheader";
+import EditMode from "./editMode.js";
 
 class DetailsPanel extends Component {
   constructor(props) {
@@ -80,34 +81,43 @@ class DetailsPanel extends Component {
         />
         <div className="wrapper">
           <Card style={styles.cardStyle}>
-            <CardHeader title={this.state.name} style={styles.title} />
-            <Divider style={styles.divider} />
-            <CardText>
-              <DatePicker
-                textFieldStyle={styles.datePicker}
-                hintText="Start Date"
-              />
-              <DatePicker
-                textFieldStyle={styles.datePicker}
-                hintText="End Date"
-              />
-              <Toggle
-                label="Notification"
-                style={styles.toggle}
-                toggled={this.state.notification}
-                onToggle={this.changeNotificationSetting}
-                labelStyle={{ fontWeight: 600 }}
-              />
+            {!this.props.editMode ? (
+              <div>
+                <CardHeader title={this.state.name} style={styles.title} />
+                <Divider style={styles.divider} />
+                <CardText>
+                  <DatePicker
+                    textFieldStyle={styles.datePicker}
+                    hintText="Start Date"
+                  />
+                  <DatePicker
+                    textFieldStyle={styles.datePicker}
+                    hintText="End Date"
+                  />
+                  <Toggle
+                    label="Notification"
+                    style={styles.toggle}
+                    toggled={this.state.notification}
+                    onToggle={this.changeNotificationSetting}
+                    labelStyle={{ fontWeight: 600 }}
+                  />
 
-              <Subheader>Notes</Subheader>
-              <TextField
-                hintText="ADD NOTES"
-                multiLine={true}
-                rows={6}
-                rowsMax={6}
-                style={{ width: "90%" }}
+                  <Subheader>Notes</Subheader>
+                  <TextField
+                    hintText="ADD NOTES"
+                    multiLine={true}
+                    rows={6}
+                    rowsMax={6}
+                    style={{ width: "90%" }}
+                  />
+                </CardText>
+              </div>
+            ) : (
+              <EditMode
+                index={this.props.editIndex}
+                onSave={this.props.onEditModeClose}
               />
-            </CardText>
+            )}
           </Card>
         </div>
       </div>
