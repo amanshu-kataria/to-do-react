@@ -38,17 +38,17 @@ class ToDoList extends Component {
       snackbarOpen: false
     };
 
-    //creates a new key if it's not present in local storage
-    if (!localStorage.taskList) {
-      localStorage.setItem("taskList", "[]");
-    }
-
     this.addTaskInput = this.addTaskInput.bind(this);
     this.closeNewTask = this.closeNewTask.bind(this);
     this.taskNameChange = this.taskNameChange.bind(this);
     this.addTask = this.addTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
     this.closeSnackbar = this.closeSnackbar.bind(this);
+  }
+
+  componentWillMount() {
+    var list = JSON.parse(localStorage.getItem("taskList"));
+    this.setState({ taskList: list });
   }
 
   //displays the hidden textfield for creating a new task
@@ -90,7 +90,7 @@ class ToDoList extends Component {
 
     list.push(this.newTask);
     localStorage.setItem("taskList", JSON.stringify(list));
-    this.setState({ addTaskVisible: false, taskName: "" });
+    this.setState({ addTaskVisible: false, taskName: "", taskList: list });
     this.props.onAddTask();
     if (list.length === 1) this.props.onTaskSelected(0);
   }
@@ -105,8 +105,7 @@ class ToDoList extends Component {
     localStorage.setItem("taskList", JSON.stringify(list));
     if (list.length >= 1) this.props.onTaskSelected(0);
     else this.props.onTaskSelected(-1);
-    this.setState({ snackbarOpen: true });
-    this.forceUpdate();
+    this.setState({ snackbarOpen: true, taskList: list });
   }
 
   render() {
@@ -130,9 +129,6 @@ class ToDoList extends Component {
         marginRight: "5%"
       }
     };
-
-    //gets saved task from local storage for rendering.
-    this.savedTask = JSON.parse(localStorage.getItem("taskList"));
 
     const iconButtonElement = (
       <IconButton touch={true}>
@@ -192,7 +188,7 @@ class ToDoList extends Component {
             </div>
           ) : null}
           <List>
-            {this.savedTask.map((task, index) => (
+            {this.state.taskList.map((task, index) => (
               <TaskItem
                 key={index}
                 name={task.name}
