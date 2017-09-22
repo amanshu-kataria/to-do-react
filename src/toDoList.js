@@ -85,7 +85,8 @@ class ToDoList extends Component {
       important: false,
       notification: false,
       startDate: null,
-      endDate: null
+      endDate: null,
+      notes: ""
     };
 
     list.push(this.newTask);
@@ -192,6 +193,7 @@ class ToDoList extends Component {
               </IconButton>
             </div>
           ) : null}
+
           <List>
             {this.state.taskList.map((task, index) => (
               <TaskItem

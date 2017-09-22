@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import AppBar from "material-ui/AppBar";
 import "./detailsPanel.css";
-import { Card, CardHeader, CardText } from "material-ui/Card";
-import DatePicker from "material-ui/DatePicker";
-import Toggle from "material-ui/Toggle";
-import Divider from "material-ui/Divider";
-import TextField from "material-ui/TextField";
-import Subheader from "material-ui/Subheader";
+import Card from "material-ui/Card";
 import EditMode from "./editMode.js";
+import DisplayMode from "./displayMode.js";
 
 class DetailsPanel extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       name: "",
       notification: "",
@@ -19,7 +16,6 @@ class DetailsPanel extends Component {
       startDate: "",
       endDate: ""
     };
-    this.changeNotificationSetting = this.changeNotificationSetting.bind(this);
   }
 
   componentWillMount() {
@@ -27,7 +23,13 @@ class DetailsPanel extends Component {
       this.setState({ name: "Task Name", notification: false });
     else {
       var task = JSON.parse(localStorage.getItem("taskList"))[this.props.task];
-      this.setState({ name: task.name, notification: task.notification });
+      this.setState({
+        name: task.name,
+        notification: task.notification,
+        notes: task.notes,
+        startDate: task.startDate,
+        endDate: task.endDate
+      });
     }
   }
 
@@ -36,17 +38,14 @@ class DetailsPanel extends Component {
       this.setState({ name: "Task Name", notification: false });
     else {
       var task = JSON.parse(localStorage.getItem("taskList"))[nextProps.task];
-      this.setState({ name: task.name, notification: task.notification });
+      this.setState({
+        name: task.name,
+        notification: task.notification,
+        notes: task.notes,
+        startDate: task.startDate,
+        endDate: task.endDate
+      });
     }
-  }
-
-  changeNotificationSetting(e) {
-    if (this.props.task === -1) return;
-
-    this.setState({ notification: e.target.checked });
-    var task = JSON.parse(localStorage.getItem("taskList"));
-    task[this.props.task].notification = e.target.checked;
-    localStorage.setItem("taskList", JSON.stringify(task));
   }
 
   render() {
@@ -54,19 +53,6 @@ class DetailsPanel extends Component {
       cardStyle: {
         paddingTop: "5%",
         paddingLeft: "5%"
-      },
-      datePicker: {
-        width: 150
-      },
-      toggle: {
-        maxWidth: "30%",
-        marginTop: 15
-      },
-      divider: {
-        marginRight: "5%"
-      },
-      title: {
-        fontWeight: "bold"
       }
     };
 
@@ -80,38 +66,9 @@ class DetailsPanel extends Component {
           showMenuIconButton={false}
         />
         <div className="wrapper">
-          <Card style={styles.cardStyle}>
+          <Card style={this.props.editMode ? styles.cardStyle : ""}>
             {!this.props.editMode ? (
-              <div>
-                <CardHeader title={this.state.name} style={styles.title} />
-                <Divider style={styles.divider} />
-                <CardText>
-                  <DatePicker
-                    textFieldStyle={styles.datePicker}
-                    hintText="Start Date"
-                  />
-                  <DatePicker
-                    textFieldStyle={styles.datePicker}
-                    hintText="End Date"
-                  />
-                  <Toggle
-                    label="Notification"
-                    style={styles.toggle}
-                    toggled={this.state.notification}
-                    onToggle={this.changeNotificationSetting}
-                    labelStyle={{ fontWeight: 600 }}
-                  />
-
-                  <Subheader>Notes</Subheader>
-                  <TextField
-                    hintText="ADD NOTES"
-                    multiLine={true}
-                    rows={6}
-                    rowsMax={6}
-                    style={{ width: "90%" }}
-                  />
-                </CardText>
-              </div>
+              <DisplayMode taskData={this.state} />
             ) : (
               <EditMode
                 index={this.props.editIndex}
