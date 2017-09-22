@@ -16,7 +16,8 @@ class EditMode extends Component {
       notification: false,
       startDate: null,
       endDate: null,
-      important: false
+      important: false,
+      notes: ""
     };
 
     this.changeNotificationSetting = this.changeNotificationSetting.bind(this);
@@ -26,6 +27,7 @@ class EditMode extends Component {
   }
 
   componentWillMount() {
+    debugger;
     var list = JSON.parse(localStorage.getItem("taskList"));
     list = list[this.props.index];
     this.setState({
@@ -33,7 +35,8 @@ class EditMode extends Component {
       notification: list.notification,
       important: list.important,
       startDate: list.startDate,
-      endDate: list.endDate
+      endDate: list.endDate,
+      notes: list.notes
     });
   }
 
@@ -55,7 +58,8 @@ class EditMode extends Component {
         notification: list.notification,
         important: list.important,
         startDate: list.startDate,
-        endDate: list.endDate
+        endDate: list.endDate,
+        notes: list.notes
       });
     }
   }
@@ -70,8 +74,10 @@ class EditMode extends Component {
       notification: this.state.notification,
       important: this.state.important,
       startDate: this.state.startDate,
-      endDate: this.state.endDate
+      endDate: this.state.endDate,
+      notes: this.state.notes
     };
+
     var list = JSON.parse(localStorage.getItem("taskList"));
     list[this.props.index] = task;
     localStorage.setItem("taskList", JSON.stringify(list));
@@ -135,6 +141,7 @@ class EditMode extends Component {
           <Subheader>Notes</Subheader>
           <TextField
             hintText="ADD NOTES"
+            value={this.state.notes}
             multiLine={true}
             rows={5}
             rowsMax={5}
