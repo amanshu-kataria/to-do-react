@@ -56,13 +56,6 @@ class DetailsPanel extends Component {
   }
 
   render() {
-    const styles = {
-      cardStyle: {
-        paddingTop: "5%",
-        paddingLeft: "5%"
-      }
-    };
-
     return (
       <div>
         <AppBar
@@ -73,7 +66,7 @@ class DetailsPanel extends Component {
           showMenuIconButton={false}
         />
         <div className="wrapper">
-          <Card style={this.props.editMode ? styles.cardStyle : ""}>
+          <Card className={this.props.editMode ? "editMode" : "displayMode"}>
             {!this.props.editMode ? (
               <DisplayMode taskData={this.state} />
             ) : (
