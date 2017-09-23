@@ -66,7 +66,7 @@ class DetailsPanel extends Component {
           showMenuIconButton={false}
         />
         <div className="wrapper">
-          <Card className={this.props.editMode ? "editMode" : "displayMode"}>
+          <Card className={this.props.editMode ? "editMode" : ""}>
             {!this.props.editMode ? (
               <DisplayMode taskData={this.state} />
             ) : (
