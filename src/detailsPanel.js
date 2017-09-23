@@ -13,37 +13,44 @@ class DetailsPanel extends Component {
       name: "",
       notification: "",
       notes: "",
-      startDate: "",
-      endDate: ""
+      deadLine: ""
     };
   }
 
   componentWillMount() {
     if (this.props.task === -1)
-      this.setState({ name: "Task Name", notification: false });
+      this.setState({
+        name: "Your task name goes here.",
+        notification: "Turn On/Off notification for individual task.",
+        deadLine: "Option to choose a deadline date.",
+        notes: "Save important notes for individual task."
+      });
     else {
       var task = JSON.parse(localStorage.getItem("taskList"))[this.props.task];
       this.setState({
         name: task.name,
         notification: task.notification,
         notes: task.notes,
-        startDate: task.startDate,
-        endDate: task.endDate
+        deadLine: task.deadLine
       });
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.task === -1)
-      this.setState({ name: "Task Name", notification: false });
+      this.setState({
+        name: "Your task name goes here.",
+        notification: "Turn On/Off notification for individual task.",
+        deadLine: "Option to choose a deadline date.",
+        notes: "Save important notes for individual task."
+      });
     else {
       var task = JSON.parse(localStorage.getItem("taskList"))[nextProps.task];
       this.setState({
         name: task.name,
         notification: task.notification,
         notes: task.notes,
-        startDate: task.startDate,
-        endDate: task.endDate
+        deadLine: task.deadLine
       });
     }
   }

@@ -12,38 +12,19 @@ class DisplayMode extends Component {
         fontWeight: "bold"
       }
     };
+
     return (
       <div>
-        <CardTitle
-          title={
-            this.props.taskData.name === "" ? (
-              "Task Name"
-            ) : (
-              this.props.taskData.name
-            )
-          }
-          style={styles.title}
-        />
+        <CardTitle title={this.props.taskData.name} style={styles.title} />
         <Divider style={styles.divider} />
         <CardText>
           <CardHeader
-            title="Start Date :"
+            title="Deadline Date"
             subtitle={
-              this.props.taskData.startDate ? (
-                this.props.taskData.startDate
+              this.props.taskData.deadLine ? (
+                this.props.taskData.deadLine
               ) : (
-                "No Date Selected"
-              )
-            }
-            style={styles.title}
-          />
-          <CardHeader
-            title="End Date :"
-            subtitle={
-              this.props.taskData.endDate ? (
-                this.props.taskData.endDate
-              ) : (
-                "No Date Selected"
+                "No deadline found for this task"
               )
             }
             style={styles.title}
@@ -51,7 +32,16 @@ class DisplayMode extends Component {
 
           <CardHeader
             title="Notification"
-            subtitle={this.props.taskData.notification ? "On" : "Off"}
+            subtitle={
+              typeof this.props.taskData.notification === "boolean" ? this.props
+                .taskData.notification ? (
+                "On"
+              ) : (
+                "Off"
+              ) : (
+                this.props.taskData.notification
+              )
+            }
             style={styles.title}
           />
 

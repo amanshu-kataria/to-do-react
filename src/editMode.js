@@ -14,8 +14,7 @@ class EditMode extends Component {
     this.state = {
       name: "",
       notification: false,
-      startDate: null,
-      endDate: null,
+      deadLine: null,
       important: false,
       notes: ""
     };
@@ -27,15 +26,13 @@ class EditMode extends Component {
   }
 
   componentWillMount() {
-    debugger;
     var list = JSON.parse(localStorage.getItem("taskList"));
     list = list[this.props.index];
     this.setState({
       name: list.name,
       notification: list.notification,
       important: list.important,
-      startDate: list.startDate,
-      endDate: list.endDate,
+      deadLine: list.deadLine,
       notes: list.notes
     });
   }
@@ -57,8 +54,7 @@ class EditMode extends Component {
         name: list.name,
         notification: list.notification,
         important: list.important,
-        startDate: list.startDate,
-        endDate: list.endDate,
+        deadLine: list.deadLine,
         notes: list.notes
       });
     }
@@ -73,8 +69,7 @@ class EditMode extends Component {
       name: this.state.name,
       notification: this.state.notification,
       important: this.state.important,
-      startDate: this.state.startDate,
-      endDate: this.state.endDate,
+      deadLine: this.state.deadLine,
       notes: this.state.notes
     };
 
@@ -122,13 +117,8 @@ class EditMode extends Component {
         <CardText>
           <DatePicker
             textFieldStyle={styles.datePicker}
-            hintText="Start Date"
-            value={this.state.startDate}
-          />
-          <DatePicker
-            textFieldStyle={styles.datePicker}
-            hintText="End Date"
-            value={this.state.endDate}
+            hintText="Deadline Date"
+            value={this.state.deadLine}
           />
           <Toggle
             label="Notification"
