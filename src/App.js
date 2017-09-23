@@ -49,7 +49,7 @@ class App extends Component {
   }
 
   changeCurrentTask(index) {
-    this.setState({ currentOpenTask: index });
+    this.setState({ currentOpenTask: index, editMode: false, editIndex: -1 });
   }
 
   closeSnackbar() {
