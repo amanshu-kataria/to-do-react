@@ -84,8 +84,7 @@ class ToDoList extends Component {
       name: this.state.taskName,
       important: false,
       notification: false,
-      startDate: null,
-      endDate: null,
+      deadLine: null,
       notes: ""
     };
 
