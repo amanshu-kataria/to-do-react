@@ -23,18 +23,56 @@ class EditMode extends Component {
     this.handleTaskName = this.handleTaskName.bind(this);
     this.handleNotes = this.handleNotes.bind(this);
     this.saveEdits = this.saveEdits.bind(this);
+    this.onDateChange = this.onDateChange.bind(this);
+    this.getStringDate = this.getStringDate.bind(this);
+    this.setStateValues = this.setStateValues.bind(this);
   }
 
-  componentWillMount() {
-    var list = JSON.parse(localStorage.getItem("taskList"));
-    list = list[this.props.index];
+  getStringDate(date) {
+    var month = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
+    var _deadline = date;
+
+    if (_deadline === null) {
+      return _deadline;
+    } else {
+      _deadline = new Date(date);
+
+      _deadline =
+        _deadline.getDate().toString() +
+        " " +
+        month[_deadline.getMonth()] +
+        ", " +
+        _deadline.getFullYear().toString();
+    }
+    return _deadline;
+  }
+
+  setStateValues(index) {
+    var list = JSON.parse(localStorage.getItem("taskList"))[index];
     this.setState({
       name: list.name,
       notification: list.notification,
       important: list.important,
-      deadLine: list.deadLine,
+      deadLine: this.getStringDate(list.deadLine),
       notes: list.notes
     });
+  }
+
+  componentWillMount() {
+    this.setStateValues(this.props.index);
   }
 
   handleTaskName(e) {
@@ -48,15 +86,7 @@ class EditMode extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps === this.props.index) return;
     else {
-      var list = JSON.parse(localStorage.getItem("taskList"));
-      list = list[this.props.index];
-      this.setState({
-        name: list.name,
-        notification: list.notification,
-        important: list.important,
-        deadLine: list.deadLine,
-        notes: list.notes
-      });
+      this.setStateValues(nextProps.index);
     }
   }
 
@@ -77,6 +107,20 @@ class EditMode extends Component {
     list[this.props.index] = task;
     localStorage.setItem("taskList", JSON.stringify(list));
     this.props.onSave();
+  }
+
+  formatDate(date) {
+    return (
+      date.getDate().toString() +
+      "-" +
+      (date.getMonth() + 1).toString() +
+      "-" +
+      date.getFullYear().toString()
+    );
+  }
+
+  onDateChange(e, date) {
+    this.setState({ deadLine: date });
   }
 
   render() {
@@ -118,7 +162,10 @@ class EditMode extends Component {
           <DatePicker
             textFieldStyle={styles.datePicker}
             hintText="Deadline Date"
+            mode="landscape"
+            onChange={this.onDateChange}
             value={this.state.deadLine}
+            formatDate={this.formatDate}
           />
           <Toggle
             label="Notification"
